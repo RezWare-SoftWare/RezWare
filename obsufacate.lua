@@ -1,32 +1,42 @@
--- Функция для XOR-шифрования и дешифрования
-local function xorEncryptDecrypt(input, key)
-    local result = {}
-    for i = 1, #input do
-        local char = string.byte(input, i)
-        local encryptedChar = bit32.bxor(char, key) -- XOR операция с использованием ключа
-        table.insert(result, string.char(encryptedChar))
-    end
-    return table.concat(result)
+local customKey = {
+    a = "1", b = "2", c = "3", d = "4", e = "5",
+    f = "6", g = "7", h = "8", i = "9", j = "0",
+    k = "!", l = "@", m = "#", n = "$", o = "%",
+    p = "^", q = "&", r = "*", s = "(", t = ")",
+    u = "-", v = "_", w = "+", x = "=", y = "[", z = "]",
+    [" "] = " "
+}
+
+local reverseKey = {}
+for k, v in pairs(customKey) do
+    reverseKey[v] = k
 end
 
--- Функция для обфускации
+-- Функция для кастомного шифрования
 function obfuscate(code)
-    local key = 123 -- Ваш ключ для шифрования
-    local obfuscatedCode = xorEncryptDecrypt(code, key)
+    local encrypted = {}
+    for i = 1, #code do
+        local char = code:sub(i, i)
+        table.insert(encrypted, customKey[char] or char) -- Заменяем символы
+    end
+    local obfuscatedCode = table.concat(encrypted)
     
-    -- Копируем зашифрованный код в буфер обмена (замените на вашу реализацию)
+    -- Копируем зашифрованный код в буфер обмена
     setclipboard(obfuscatedCode)
     
-    -- Печатаем зашифрованный код в консоль
     print("Обфусцированный код:", obfuscatedCode)
     return obfuscatedCode -- Возвращаем зашифрованный код
 end
 
--- Функция для получения расшифрованного кода
+-- Функция для кастомного расшифрования
 function getdecrypted(encodedCode)
-    local key = 123 -- Ваш ключ для расшифровки
-    local decryptedCode = xorEncryptDecrypt(encodedCode, key)
-    
+    local decrypted = {}
+    for i = 1, #encodedCode do
+        local char = encodedCode:sub(i, i)
+        table.insert(decrypted, reverseKey[char] or char) -- Обратная замена
+    end
+    local decryptedCode = table.concat(decrypted)
+
     -- Выполнение расшифрованного кода
     local func, err = loadstring(decryptedCode)
     if func then
@@ -35,5 +45,3 @@ function getdecrypted(encodedCode)
         print("Ошибка при выполнении:", err)
     end
 end
-
-return { obfuscate = obfuscate, getdecrypted = getdecrypted }
