@@ -19,6 +19,7 @@ function obfuscate(code)
     
     -- Печатаем зашифрованный код в консоль
     print("Обфусцированный код:", obfuscatedCode)
+    return obfuscatedCode -- Возвращаем зашифрованный код
 end
 
 -- Функция для получения расшифрованного кода
