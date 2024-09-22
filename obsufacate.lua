@@ -1,4 +1,5 @@
-function xorEncryptDecrypt(input, key)
+-- Функция для XOR-шифрования и дешифрования
+local function xorEncryptDecrypt(input, key)
     local result = {}
     for i = 1, #input do
         local char = string.byte(input, i)
@@ -8,5 +9,25 @@ function xorEncryptDecrypt(input, key)
     return table.concat(result)
 end
 
--- Возвращаем функцию
-return xorEncryptDecrypt
+-- Функция для обфускации
+function obfuscate(code)
+    local key = 123 -- Ваш ключ для шифрования
+    local obfuscatedCode = xorEncryptDecrypt(code, key)
+    
+    -- Копируем зашифрованный код в буфер обмена
+    setclipboard(obfuscatedCode) -- Используйте setclipboard в поддерживающей среде
+
+    -- Печатаем зашифрованный код в консоль
+    print(obfuscatedCode)
+end
+
+-- Функция для получения расшифрованного кода
+function getdecrypted(encodedCode)
+    local key = 123 -- Ваш ключ для расшифровки
+    local decryptedCode = xorEncryptDecrypt(encodedCode, key)
+    
+    -- Выполнение расшифрованного кода
+    loadstring(decryptedCode)()
+end
+
+return { obfuscate = obfuscate, getdecrypted = getdecrypted }
