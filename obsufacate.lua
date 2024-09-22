@@ -14,11 +14,11 @@ function obfuscate(code)
     local key = 123 -- Ваш ключ для шифрования
     local obfuscatedCode = xorEncryptDecrypt(code, key)
     
-    -- Копируем зашифрованный код в буфер обмена
-    setclipboard(obfuscatedCode) -- Используйте setclipboard в поддерживающей среде
-
+    -- Копируем зашифрованный код в буфер обмена (замените на вашу реализацию)
+    setclipboard(obfuscatedCode)
+    
     -- Печатаем зашифрованный код в консоль
-    print(obfuscatedCode)
+    print("Обфусцированный код:", obfuscatedCode)
 end
 
 -- Функция для получения расшифрованного кода
@@ -27,7 +27,12 @@ function getdecrypted(encodedCode)
     local decryptedCode = xorEncryptDecrypt(encodedCode, key)
     
     -- Выполнение расшифрованного кода
-    loadstring(decryptedCode)()
+    local func, err = loadstring(decryptedCode)
+    if func then
+        func()
+    else
+        print("Ошибка при выполнении:", err)
+    end
 end
 
 return { obfuscate = obfuscate, getdecrypted = getdecrypted }
